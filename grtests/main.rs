@@ -1,5 +1,7 @@
 use matan;
 
-fn main() {
-    matan::start("Test");
+fn main() -> Result<(), String> {
+    matan::start("Test")?;
+
+    Ok(())
 }
