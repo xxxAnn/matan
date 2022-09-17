@@ -1,10 +1,10 @@
 use crate::text;
 
-use std::{time, fmt::Write};
+use std::time;
 
 use sdl2::{pixels::Color, rect::{Point, Rect}, ttf::Sdl2TtfContext, render::Canvas, video::Window, Sdl, VideoSubsystem};
 
-pub mod Fonts {
+pub mod fonts {
     const SANS: &'static str = "OpenSans-Regular.ttf";
 }
 
@@ -56,14 +56,17 @@ where T: Into<Color>, J: Into<Color>, K: Into<Rect>, V: Into<Point>,
 R: Iterator<Item = WriteCommand<T, K>>, 
 U: Iterator<Item = RenderCommand<J, V>>,
 X: Text, Z: Object {
+    /// Returns an Iterator over WriteCommand objects
+    /// at the specified instant.
     fn text_write_commands(&self, inst: time::Instant) -> R;
-
+    /// Returns an Iterator over RenderCommand objects
+    /// at the specified instant.
     fn object_render_commands(&self, inst: time::Instant) -> U; 
-
+    /// Adds a Text object to the grid.
     fn add_text(&mut self, t: X);
-
+    /// Adds a Renderable object to the grid.
     fn add_object(&mut self, o: Z);
-
+    /// Setup the Canvas  before drawing anything on it.
     fn setup(&mut self, cvs: &mut Canvas<Window>, sdl: &Sdl, ttf: &Sdl2TtfContext, vis: &VideoSubsystem);
 
     fn process(&mut self, cvs: &mut Canvas<Window>, sdl: &Sdl, ttf: &Sdl2TtfContext, vis: &VideoSubsystem) -> Result<(), String> {
