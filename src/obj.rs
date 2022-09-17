@@ -63,9 +63,14 @@ X: Text, Z: Object {
     fn add_text(&mut self, t: X);
 
     fn add_object(&mut self, o: Z);
-    // TODO: Add background color
+
+    fn setup(&mut self, cvs: &mut Canvas<Window>, sdl: &Sdl, ttf: &Sdl2TtfContext, vis: &VideoSubsystem);
+
     fn process(&mut self, cvs: &mut Canvas<Window>, sdl: &Sdl, ttf: &Sdl2TtfContext, vis: &VideoSubsystem) -> Result<(), String> {
         let ins = time::Instant::now();
+
+        self.setup(cvs, sdl, ttf, vis);
+
         for r in self.object_render_commands(ins.clone()) {
             for (a, b) in r.pts {
                 cvs.set_draw_color(a);
