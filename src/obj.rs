@@ -2,7 +2,9 @@ use crate::text;
 
 use std::time;
 
-use sdl2::{pixels::Color, rect::{Point, Rect}, ttf::Sdl2TtfContext, render::Canvas, video::Window, Sdl, VideoSubsystem};
+use sdl2::{pixels::Color, rect::{Point, Rect}, ttf::Sdl2TtfContext, render::Canvas, video::Window, Sdl, VideoSubsystem, event::Event};
+
+pub const RR: u128 = 100;
 
 pub mod fonts {
     const SANS: &'static str = "OpenSans-Regular.ttf";
@@ -69,9 +71,7 @@ X: Text, Z: Object {
     /// Setup the Canvas  before drawing anything on it.
     fn setup(&mut self, cvs: &mut Canvas<Window>, sdl: &Sdl, ttf: &Sdl2TtfContext, vis: &VideoSubsystem);
 
-    fn process(&mut self, cvs: &mut Canvas<Window>, sdl: &Sdl, ttf: &Sdl2TtfContext, vis: &VideoSubsystem) -> Result<(), String> {
-        let ins = time::Instant::now();
-
+    fn process(&mut self, cvs: &mut Canvas<Window>, sdl: &Sdl, ttf: &Sdl2TtfContext, vis: &VideoSubsystem, ins: time::Instant) -> Result<(), String> {
         self.setup(cvs, sdl, ttf, vis);
 
         for r in self.object_render_commands(ins.clone()) {
@@ -84,6 +84,52 @@ X: Text, Z: Object {
         for t in self.text_write_commands(ins.clone()) {
             text(ttf, cvs, t.pth, t.clr, t.psize, Some(t.rct.into()), &t.txt)?;
         }
+        Ok(())
+    }
+
+    fn start(&mut self, title: &str, width: u32, height: u32) -> Result<(), String> {
+        let sdl_context = sdl2::init()?;
+        let video_subsys = sdl_context.video()?;
+        let ttf_context = sdl2::ttf::init().map_err(|e| e.to_string())?;
+    
+        let window = video_subsys
+            .window(
+                title,
+                width,
+                height,
+            )
+            .position_centered()
+            .opengl()
+            .build()
+            .map_err(|e| e.to_string())?;
+    
+        let mut canvas = window.into_canvas().build().map_err(|e| e.to_string())?;
+    
+        self.setup(&mut canvas, &sdl_context, &ttf_context, &video_subsys);
+
+        canvas.present();
+
+        let ins = time::Instant::now();
+    
+        let mut events = sdl_context.event_pump()?;
+    
+        let mut refresh = time::Instant::now();
+
+        'main: loop {
+
+            for event in events.poll_iter() {
+                match event {
+                    Event::Quit { .. } => break 'main,
+                    _ => {}
+                }
+            }
+            // only process every f millis
+            if refresh.elapsed().as_millis() > RR {
+                refresh = time::Instant::now();
+                self.process(&mut canvas, &sdl_context, &ttf_context, &video_subsys, ins)?;
+            }
+        }
+    
         Ok(())
     }
 }
