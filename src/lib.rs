@@ -1,9 +1,6 @@
 #![allow(dead_code, unused_variables)]
 extern crate sdl2;
 
-use obj::CommandGrid;
-use sdl2::event::Event;
-
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::render::Canvas;
@@ -11,6 +8,7 @@ use sdl2::video::Window;
 use sdl2::ttf::Sdl2TtfContext;
 
 mod obj;
+pub mod things;
 
 pub fn text<T, K>(
     ttfc: &Sdl2TtfContext, cvs: &mut Canvas<Window>, 
