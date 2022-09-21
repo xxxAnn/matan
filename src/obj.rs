@@ -134,3 +134,20 @@ X: Text, Z: Object {
     }
 }
 
+impl RenderCommand<(u8, u8, u8, u8), (i32, i32)> {
+    pub fn from_linear_function(m: f32, b: f32, width: f32, screen: (u32, u32)) -> Self {
+        let mut v = vec!();
+        for x in 0..(screen.0) { for y in  0..(screen.1) {
+            if distance((x as f32, y as f32), (x as f32, m*(x as f32)+y as f32)) < width {
+                v.push(((0u8, 0u8, 0u8, 1u8), (x as i32, y as i32)))
+            }
+        }}
+        Self {
+            pts: v
+        }
+    }
+}
+
+fn distance(a: (f32, f32), b: (f32, f32)) -> f32 {
+    todo!()
+}
