@@ -54,16 +54,14 @@ pub trait Text {
 }
 
 pub trait CommandGrid<T, J, K, V, R, U, X, Z>
-where T: Into<Color>, J: Into<Color>, K: Into<Rect>, V: Into<Point>, 
-R: Iterator<Item = WriteCommand<T, K>>, 
-U: Iterator<Item = RenderCommand<J, V>>,
+where T: Into<Color>, J: Into<Color>, K: Into<Rect>, V: Into<Point>,
 X: Text, Z: Object {
     /// Returns an Iterator over WriteCommand objects
     /// at the specified instant.
-    fn text_write_commands(&self, inst: time::Instant) -> R;
+    fn text_write_commands(&self, inst: time::Instant) -> Vec<WriteCommand<T, K>>;
     /// Returns an Iterator over RenderCommand objects
     /// at the specified instant.
-    fn object_render_commands(&self, inst: time::Instant) -> U; 
+    fn object_render_commands(&self, inst: time::Instant) -> Vec<RenderCommand<J, V>>; 
     /// Adds a Text object to the grid.
     fn add_text(&mut self, t: X);
     /// Adds a Renderable object to the grid.
