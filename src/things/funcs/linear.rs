@@ -17,22 +17,35 @@ pub struct AngularLinearFunctionDescriptor {
 }
 
 pub struct InterceptLinearFunctionDescriptor {
-    gradient: f32,
+    slope: f32,
     intercept: f32,
     width: f32
 }
 
 impl LinearFunctionDescriptor {
     pub fn slope(&self) -> f32 {
-        todo!()
+        match self {
+            Self::Angle(a) => {
+                a.angle.tan()
+            },
+            Self::Standard(s) => {
+                s.slope
+            }
+        }
     }
 
     pub fn intercept(&self) -> f32 {
-        todo!()
+        match self {
+            Self::Angle(a) => a.intercept,
+            Self::Standard(s) => s.intercept
+        }
     }
 
     pub fn width(&self) -> f32 {
-        todo!()
+        match self {
+            Self::Angle(a) => a.width,
+            Self::Standard(s) => s.width
+        }
     }
 }
 
