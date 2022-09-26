@@ -73,7 +73,7 @@ pub trait Text {
     type Rct: Into<Rect>;
     type Params;
     /// Returns a command to Write the text at the specified instant
-    fn render(&self, inst: u128) -> WriteCommand<Self::Clr, Self::Rct>;
+    fn render(&self, inst: u128) -> Vec<WriteCommand<Self::Clr, Self::Rct>>;
     /// Params is a struct containing parameters to generate text
     /// and rect size.
     /// If length is zero this snapshot will always be rendered.
