@@ -1,5 +1,3 @@
-use sdl2::{pixels::Color, rect::Rect};
-
 use crate::obj::{Text, WriteCommand};
 
 pub struct ExpressionUnit {
