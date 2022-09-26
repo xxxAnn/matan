@@ -10,6 +10,7 @@ pub mod fonts {
     const SANS: &'static str = "OpenSans-Regular.ttf";
 }
 
+#[derive(Clone)]
 pub struct RenderCommand<T, K> 
 where T: Into<Color>, K: Into<Point> {
     pts: Vec<(T, K)>

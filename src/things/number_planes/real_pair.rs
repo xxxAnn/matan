@@ -16,7 +16,13 @@ impl CommandGrid<Clr, Clr, Rct, Pnt, Vec<WriteCommand<Clr, Rct>>, Vec<RenderComm
     }
 
     fn object_render_commands(&self, inst: u128) -> Vec<RenderCommand<Clr, Pnt>> {
-        todo!()
+        self.r.v
+            .iter()
+            .filter(|((a, b), _)| a<&inst && b<&inst)
+                .map(|(_, z)| 
+                    z.clone()
+                )
+            .collect()
     }
 
     fn add_text(&mut self, t: Expression) {

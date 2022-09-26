@@ -5,7 +5,7 @@ use self::linear::LinearFunction;
 pub mod linear;
 
 pub struct RealRenderable {
-    v: Vec<((u128, u128), RenderCommand<(u8, u8, u8, u8), (i32, i32)>)>
+    pub v: Vec<((u128, u128), RenderCommand<(u8, u8, u8, u8), (i32, i32)>)>
 }
 
 impl Object for RealRenderable {
