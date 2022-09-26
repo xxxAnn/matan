@@ -1,9 +1,6 @@
-use std::slice::{Iter, IterMut};
-
 use crate::{things::{exp::Expression, funcs::RealRenderable}, obj::{CommandGrid, RenderCommand, WriteCommand}};
 
 
-// for all practical purposes 'a = 'static
 pub struct RealNumberPairPlane {
     exps: Vec<Expression>,
     r: RealRenderable
@@ -14,11 +11,11 @@ type Rct = (i32, i32, u32, u32);
 type Pnt = (i32, i32);
 
 impl CommandGrid<Clr, Clr, Rct, Pnt, Vec<WriteCommand<Clr, Rct>>, Vec<RenderCommand<Clr, Pnt>>, Expression, RealRenderable> for RealNumberPairPlane {
-    fn text_write_commands(&self, inst: std::time::Instant) -> Vec<WriteCommand<Clr, Rct>> {
+    fn text_write_commands(&self, inst: u128) -> Vec<WriteCommand<Clr, Rct>> {
         todo!()
     }
 
-    fn object_render_commands(&self, inst: std::time::Instant) -> Vec<RenderCommand<Clr, Pnt>> {
+    fn object_render_commands(&self, inst: u128) -> Vec<RenderCommand<Clr, Pnt>> {
         todo!()
     }
 

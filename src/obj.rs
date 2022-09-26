@@ -15,6 +15,22 @@ where T: Into<Color>, K: Into<Point> {
     pts: Vec<(T, K)>
 }
 
+impl<T, K> RenderCommand<T, K>
+where T: Into<Color>, K: Into<Point> {
+    pub fn points(&self) -> &[(T, K)] {
+        &self.pts
+    }
+}
+
+impl<T, K> RenderCommand<T, K>
+where T: Into<Color>, K: Into<Point> {
+    pub fn new(pts: Vec<(T, K)>) -> Self {
+        Self {
+            pts
+        }
+    }
+}
+
 pub struct WriteCommand<T, K>
 where T: Into<Color>, K: Into<Rect> {
     clr: T,
@@ -24,13 +40,26 @@ where T: Into<Color>, K: Into<Rect> {
     psize: u16
 }
 
+impl<T, K> WriteCommand<T, K>
+where T: Into<Color>, K: Into<Rect> {
+    pub fn new(clr: T, rct: K, pth: &'static str, txt: String, psize: u16) -> Self {
+        Self {
+            clr,
+            rct,
+            pth,
+            txt,
+            psize
+        }
+    }
+}
+
 /// Trait for every object that can be rendered
 pub trait Object {
     type Clr: Into<Color>;
     type Pnt: Into<Point>;
     type Params;
     /// Returns a command to Render the object at the specified instant
-    fn render(&self, inst: time::Instant) -> RenderCommand<Self::Clr, Self::Pnt>;
+    fn render(&self, inst: u128) -> RenderCommand<Self::Clr, Self::Pnt>;
     /// Params is a struct containing parameters to generate points and colors.
     /// If length is zero this snapshot will always be rendered.
     /// If multiple snapshots overlap, they will be rendered
@@ -44,7 +73,7 @@ pub trait Text {
     type Rct: Into<Rect>;
     type Params;
     /// Returns a command to Write the text at the specified instant
-    fn render(&self, inst: time::Instant) -> WriteCommand<Self::Clr, Self::Rct>;
+    fn render(&self, inst: u128) -> WriteCommand<Self::Clr, Self::Rct>;
     /// Params is a struct containing parameters to generate text
     /// and rect size.
     /// If length is zero this snapshot will always be rendered.
@@ -58,10 +87,10 @@ where T: Into<Color>, J: Into<Color>, K: Into<Rect>, V: Into<Point>,
 X: Text, Z: Object {
     /// Returns an Iterator over WriteCommand objects
     /// at the specified instant.
-    fn text_write_commands(&self, inst: time::Instant) -> Vec<WriteCommand<T, K>>;
+    fn text_write_commands(&self, inst: u128) -> Vec<WriteCommand<T, K>>;
     /// Returns an Iterator over RenderCommand objects
     /// at the specified instant.
-    fn object_render_commands(&self, inst: time::Instant) -> Vec<RenderCommand<J, V>>; 
+    fn object_render_commands(&self, inst: u128) -> Vec<RenderCommand<J, V>>; 
     /// Adds a Text object to the grid.
     fn add_text(&mut self, t: X);
     /// Adds a Renderable object to the grid.
@@ -69,17 +98,17 @@ X: Text, Z: Object {
     /// Setup the Canvas  before drawing anything on it.
     fn setup(&mut self, cvs: &mut Canvas<Window>, sdl: &Sdl, ttf: &Sdl2TtfContext, vis: &VideoSubsystem);
 
-    fn process(&mut self, cvs: &mut Canvas<Window>, sdl: &Sdl, ttf: &Sdl2TtfContext, vis: &VideoSubsystem, ins: time::Instant) -> Result<(), String> {
+    fn process(&mut self, cvs: &mut Canvas<Window>, sdl: &Sdl, ttf: &Sdl2TtfContext, vis: &VideoSubsystem, ins: u128) -> Result<(), String> {
         self.setup(cvs, sdl, ttf, vis);
 
-        for r in self.object_render_commands(ins.clone()) {
+        for r in self.object_render_commands(ins) {
             for (a, b) in r.pts {
                 cvs.set_draw_color(a);
                 cvs.draw_point(b)?;
             }
         }
         cvs.present();
-        for t in self.text_write_commands(ins.clone()) {
+        for t in self.text_write_commands(ins) {
             text(ttf, cvs, t.pth, t.clr, t.psize, Some(t.rct.into()), &t.txt)?;
         }
         Ok(())
@@ -124,7 +153,9 @@ X: Text, Z: Object {
             // only process every f millis
             if refresh.elapsed().as_millis() > RR {
                 refresh = time::Instant::now();
-                self.process(&mut canvas, &sdl_context, &ttf_context, &video_subsys, ins)?;
+                self.process(&mut canvas, &sdl_context, &ttf_context, &video_subsys, 
+                    time::Instant::now().duration_since(ins).as_millis()
+                )?;
             }
         }
     

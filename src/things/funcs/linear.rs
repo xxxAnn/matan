@@ -1,3 +1,5 @@
+use sdl2::{pixels::Color, rect::Point};
+
 use crate::obj::{RenderCommand, Object};
 
 pub struct LinearFunction {
@@ -49,13 +51,34 @@ impl LinearFunctionDescriptor {
     }
 }
 
+pub fn combine_renderers<T, K>(o: Vec<&RenderCommand<T, K>>) -> RenderCommand<T, K>
+where T: Into<Color> + Clone, K: Into<Point> + PartialEq + Clone {
+    let mut alr = vec!();
+    let mut v = vec!();
+    for x in o {
+        for (a, b) in x.points() {
+            if !alr.contains(&b) {
+                alr.push(b);
+                v.push((a.clone(), b.clone()))
+            }
+        }
+    }
+
+    RenderCommand::new(v)
+}
+
 impl Object for LinearFunction {
     type Clr = (u8, u8, u8, u8);
     type Pnt = (i32, i32);
     type Params = LinearFunctionDescriptor;
 
-    fn render(&self, inst: std::time::Instant) -> RenderCommand<Self::Clr, Self::Pnt> {
-        todo!()
+    fn render(&self, inst: u128) -> RenderCommand<Self::Clr, Self::Pnt> {
+        combine_renderers(self.v
+            .iter()
+            .filter(|((a, b), _)| a<&inst && &inst<b)
+            .map(|(_, b)| b)
+            .collect()
+        )
     }
 
     fn add_snapshot(&mut self, start: u64, length: std::time::Duration, params: Option<Self::Params>) {

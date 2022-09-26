@@ -1,4 +1,6 @@
-use crate::obj::Text;
+use sdl2::{pixels::Color, rect::Rect};
+
+use crate::obj::{Text, WriteCommand};
 
 pub struct ExpressionUnit {
     txt: String,
@@ -13,13 +15,36 @@ pub struct Expression {
     v: Vec<((u128, u128), ExpressionUnit)>
 }
 
+pub fn combine_renderers<T, K>(o: Vec<&WriteCommand<T, K>>) -> WriteCommand<T, K>
+where T: Into<Color> + Clone, K: Into<Rect> + PartialEq + Clone {
+    let mut alr = vec!();
+    let mut v = vec!();
+    for x in o {
+        for (a, b) in x.points() {
+            if !alr.contains(&b) {
+                alr.push(b);
+                v.push((a.clone(), b.clone()))
+            }
+        }
+    }
+
+    RenderCommand::new(v)
+}
+
 impl Text for Expression {
     type Clr = (u8, u8, u8, u8);
     type Rct = (i32, i32, u32, u32);
     type Params = ExpressionUnit;
 
-    fn render(&self, inst: std::time::Instant) -> crate::obj::WriteCommand<Self::Clr, Self::Rct> {
-        todo!()
+    fn render(&self, inst: u128) -> crate::obj::WriteCommand<Self::Clr, Self::Rct> {
+        combine_writers(self.v.into_iter().filter(|(a, _)| a<&inst && &inst<b).map(|(_, b)| WriteCommand::new(
+            txt: b.txt,
+            pos: b.pos,
+            size: b.size,
+            font: b.font,
+            psize: b.psize,
+            clr: b.clr
+        )))
     }
 
     fn add_snapshot(&mut self, start: u64, length: std::time::Duration, params: Option<Self::Params>) {
