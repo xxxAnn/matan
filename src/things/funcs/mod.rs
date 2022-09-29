@@ -1,6 +1,6 @@
 use crate::obj::{RenderCommand, Object};
 
-use self::linear::LinearFunction;
+use self::linear::{LinearFunction, combine_renderers};
 
 pub mod linear;
 
@@ -14,7 +14,7 @@ impl Object for RealRenderable {
     type Params = RenderCommand<(u8, u8, u8, u8), (i32, i32)>;
 
     fn render(&self, inst: u128) -> RenderCommand<Self::Clr, Self::Pnt> {
-        todo!()
+       combine_renderers(self.v.iter().filter(|((a, b), _)| a<&inst && &inst<b).map(|(_, z)| z).collect())
     }
 
     fn add_snapshot(&mut self, start: u64, length: std::time::Duration, params: Option<Self::Params>) {
