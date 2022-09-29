@@ -1,13 +1,15 @@
-use crate::text;
+use crate::{text, alias::DefaultPoint};
 
 use std::time;
+
+use crate::alias::DefaultColor;
 
 use sdl2::{pixels::Color, rect::{Point, Rect}, ttf::Sdl2TtfContext, render::Canvas, video::Window, Sdl, VideoSubsystem, event::Event};
 
 pub const RR: u128 = 100;
 
 pub mod fonts {
-    const SANS: &'static str = "OpenSans-Regular.ttf";
+    const SANS: &str = "OpenSans-Regular.ttf";
 }
 
 #[derive(Clone)]
@@ -164,7 +166,7 @@ X: Text, Z: Object {
     }
 }
 
-impl RenderCommand<(u8, u8, u8, u8), (i32, i32)> {
+impl RenderCommand<DefaultColor, DefaultPoint> {
     pub fn from_linear_function(m: f32, b: f32, width: f32, screen: (u32, u32)) -> Self {
         let mut v = vec!();
         for x in 0..(screen.0) { for y in  0..(screen.1) {

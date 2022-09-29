@@ -1,4 +1,4 @@
-use crate::{things::{exp::Expression, funcs::RealRenderable}, obj::{CommandGrid, RenderCommand, WriteCommand}};
+use crate::{things::{exp::Expression, funcs::RealRenderable}, obj::{CommandGrid, RenderCommand, WriteCommand}, alias::{DefaultRect, DefaultColor, DefaultPoint}};
 
 
 pub struct RealNumberPairPlane {
@@ -6,9 +6,9 @@ pub struct RealNumberPairPlane {
     r: RealRenderable
 }
 
-type Clr = (u8, u8, u8, u8);
-type Rct = (i32, i32, u32, u32);
-type Pnt = (i32, i32);
+type Clr = DefaultColor;
+type Rct = DefaultRect;
+type Pnt = DefaultPoint;
 
 impl CommandGrid<Clr, Clr, Rct, Pnt, Vec<WriteCommand<Clr, Rct>>, Vec<RenderCommand<Clr, Pnt>>, Expression, RealRenderable> for RealNumberPairPlane {
     fn text_write_commands(&self, inst: u128) -> Vec<WriteCommand<Clr, Rct>> {

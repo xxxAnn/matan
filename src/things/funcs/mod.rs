@@ -1,17 +1,19 @@
-use crate::obj::{RenderCommand, Object};
+use crate::{obj::{RenderCommand, Object}, alias::DefaultPoint};
 
 use self::linear::{LinearFunction, combine_renderers};
+
+use crate::alias::DefaultColor;
 
 pub mod linear;
 
 pub struct RealRenderable {
-    pub v: Vec<((u128, u128), RenderCommand<(u8, u8, u8, u8), (i32, i32)>)>
+    pub v: Vec<((u128, u128), RenderCommand<DefaultColor, DefaultPoint>)>
 }
 
 impl Object for RealRenderable {
-    type Clr = (u8, u8, u8, u8);
-    type Pnt = (i32, i32);
-    type Params = RenderCommand<(u8, u8, u8, u8), (i32, i32)>;
+    type Clr = DefaultColor;
+    type Pnt = DefaultPoint;
+    type Params = RenderCommand<DefaultColor, DefaultPoint>;
 
     fn render(&self, inst: u128) -> RenderCommand<Self::Clr, Self::Pnt> {
        combine_renderers(self.v.iter().filter(|((a, b), _)| a<&inst && &inst<b).map(|(_, z)| z).collect())
@@ -19,10 +21,7 @@ impl Object for RealRenderable {
 
     fn add_snapshot(&mut self, start: u64, length: std::time::Duration, params: Option<Self::Params>) {
         let m = (start as u128, (start as u128)+length.as_millis());
-        match params {
-            Some(n) => self.v.push((m, n)),
-            _ => {}
-        }
+        if let Some(n) = params { self.v.push((m, n)) }
     }
 }
 

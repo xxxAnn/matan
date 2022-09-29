@@ -1,12 +1,13 @@
-use crate::obj::{Text, WriteCommand};
+use crate::{obj::{Text, WriteCommand}, alias::{DefaultRect, DefaultPoint}};
+use crate::alias::DefaultColor;
 
 pub struct ExpressionUnit {
     txt: String,
-    pos: (i32, i32), 
+    pos: DefaultPoint, 
     size: (u32, u32),
     font: &'static str,
     psize: u16,
-    clr: (u8, u8, u8, u8)   
+    clr: DefaultColor   
 }
 
 pub struct Expression {
@@ -14,8 +15,8 @@ pub struct Expression {
 }
 
 impl Text for Expression {
-    type Clr = (u8, u8, u8, u8);
-    type Rct = (i32, i32, u32, u32);
+    type Clr = DefaultColor;
+    type Rct = DefaultRect;
     type Params = ExpressionUnit;
 
     fn render(&self, inst: u128) -> Vec<WriteCommand<Self::Clr, Self::Rct>> {

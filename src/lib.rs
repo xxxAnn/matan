@@ -10,6 +10,12 @@ use sdl2::ttf::Sdl2TtfContext;
 mod obj;
 pub mod things;
 
+pub mod alias {
+    pub type DefaultColor = (u8, u8, u8, u8);
+    pub type DefaultPoint = (i32, i32);
+    pub type DefaultRect = (i32, i32, u32, u32);
+}
+
 pub fn text<T, K>(
     ttfc: &Sdl2TtfContext, cvs: &mut Canvas<Window>, 
     pth: &str, clr: T, psize: u16, rct: K, txt: &str

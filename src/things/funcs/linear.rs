@@ -2,8 +2,10 @@ use sdl2::{pixels::Color, rect::Point};
 
 use crate::obj::{RenderCommand, Object};
 
+use crate::alias::{DefaultColor, DefaultPoint};
+
 pub struct LinearFunction {
-    pub v: Vec<((u128, u128), RenderCommand<(u8, u8, u8, u8), (i32, i32)>)>,
+    pub v: Vec<((u128, u128), RenderCommand<DefaultColor, DefaultPoint>)>,
     screen: (u32, u32)
 }
 
@@ -68,8 +70,8 @@ where T: Into<Color> + Clone, K: Into<Point> + PartialEq + Clone {
 }
 
 impl Object for LinearFunction {
-    type Clr = (u8, u8, u8, u8);
-    type Pnt = (i32, i32);
+    type Clr = DefaultColor;
+    type Pnt = DefaultPoint;
     type Params = LinearFunctionDescriptor;
 
     fn render(&self, inst: u128) -> RenderCommand<Self::Clr, Self::Pnt> {
@@ -102,7 +104,7 @@ impl Object for LinearFunction {
 
 impl LinearFunction {
     fn new(screen: (u32, u32)) -> Self {
-        return Self {
+        Self {
             v: vec!(),
             screen
         }
