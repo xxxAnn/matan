@@ -168,7 +168,7 @@ impl RenderCommand<DefaultColor, DefaultPoint> {
         let mut v = vec!();
         for x in 0..(screen.0) { for y in  0..(screen.1) {
             if distance((x as f32, y as f32), (x as f32, m*(x as f32)+y as f32)) < width {
-                v.push(((0u8, 0u8, 0u8, 1u8), (x as i32, y as i32)))
+                v.push(((0u8, 0u8, 0u8, 1u8), (x as i32, y as i32)));
             }
         }}
         Self {

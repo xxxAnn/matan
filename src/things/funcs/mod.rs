@@ -20,7 +20,7 @@ impl Object for RealRenderable {
     }
 
     fn add_snapshot(&mut self, start: u64, length: std::time::Duration, params: Option<Self::Params>) {
-        let m = (start as u128, (start as u128)+length.as_millis());
+        let m = (u128::from(start) as u128, (u128::from(start))+length.as_millis());
         if let Some(n) = params { self.v.push((m, n)) }
     }
 }

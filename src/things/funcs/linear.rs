@@ -10,17 +10,17 @@ pub struct LinearFunction {
 }
 
 pub enum LinearFunctionDescriptor {
-    Angle(AngularLinearFunctionDescriptor),
-    Standard(InterceptLinearFunctionDescriptor)
+    Angle(AngularDescriptor),
+    Standard(InterceptDescriptor)
 }
 
-pub struct AngularLinearFunctionDescriptor {
+pub struct AngularDescriptor {
     angle: f32,
     intercept: f32,
     width: f32
 }
 
-pub struct InterceptLinearFunctionDescriptor {
+pub struct InterceptDescriptor {
     slope: f32,
     intercept: f32,
     width: f32
@@ -61,7 +61,7 @@ where T: Into<Color> + Clone, K: Into<Point> + PartialEq + Clone {
         for (a, b) in x.points() {
             if !alr.contains(&b) {
                 alr.push(b);
-                v.push((a.clone(), b.clone()))
+                v.push((a.clone(), b.clone()));
             }
         }
     }
