@@ -1,6 +1,6 @@
 use crate::{obj::{RenderCommand, Object}, alias::DefaultPoint};
 
-use self::linear::{LinearFunction, combine_renderers};
+use self::linear::combine_renderers;
 
 use crate::alias::DefaultColor;
 
@@ -26,7 +26,8 @@ impl Object for RealRenderable {
 }
 
 impl RealRenderable {
-    pub fn new(o: &[LinearFunction], lookup_intervals: Vec<u128>, delay: u128) -> Self {
+    #[must_use]
+    pub fn new(o: &[linear::Function], lookup_intervals: Vec<u128>, delay: u128) -> Self {
         let mut r = RealRenderable {
             v: vec!()
         };

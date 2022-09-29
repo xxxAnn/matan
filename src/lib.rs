@@ -1,4 +1,4 @@
-#![allow(dead_code, unused_variables)]
+#![allow(dead_code, unused_variables, clippy::cast_precision_loss, clippy::cast_possible_wrap)]
 extern crate sdl2;
 
 use sdl2::pixels::Color;
@@ -16,6 +16,8 @@ pub mod alias {
     pub type DefaultRect = (i32, i32, u32, u32);
 }
 
+/// # Errors
+/// Upstreams texture creation errors.
 pub fn text<T, K>(
     ttfc: &Sdl2TtfContext, cvs: &mut Canvas<Window>, 
     pth: &str, clr: T, psize: u16, rct: K, txt: &str
