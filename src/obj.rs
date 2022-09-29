@@ -148,12 +148,9 @@ X: Text, Z: Object {
         'main: loop {
 
             for event in events.poll_iter() {
-                match event {
-                    Event::Quit { .. } => break 'main,
-                    _ => {}
-                }
+                if let Event::Quit { .. } = event { break 'main }
             }
-            // only process every f millis
+            // only process every RR millis
             if refresh.elapsed().as_millis() > RR {
                 refresh = time::Instant::now();
                 self.process(&mut canvas, &sdl_context, &ttf_context, &video_subsys, 

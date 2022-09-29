@@ -32,10 +32,6 @@ impl Text for Expression {
 
     fn add_snapshot(&mut self, start: u64, length: std::time::Duration, params: Option<Self::Params>) {
         let m = (start as u128, (start as u128)+length.as_millis());
-        match params {
-            Some(p) => self.v.push((m, p)),
-            _ => {}
-        }
-        
+        if let Some(p) = params { self.v.push((m, p)) }
     }
 }
