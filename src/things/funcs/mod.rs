@@ -28,8 +28,8 @@ impl Object for RealRenderable {
 impl RealRenderable {
     #[must_use]
     pub fn new(o: &[linear::Function], lookup_intervals: Vec<u128>, delay: u128) -> Self {
-        let mut r = RealRenderable {
-            v: vec!()
+        let mut r = Self {
+            v: Vec::new()
         };
         for i in lookup_intervals {
             r.v = (o.iter().map(|x| ((i, i+delay), x.render(i)))).collect();

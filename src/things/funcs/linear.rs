@@ -39,14 +39,14 @@ impl FunctionDescriptor {
         }
     }
     #[must_use]
-    pub fn intercept(&self) -> f32 {
+    pub const fn intercept(&self) -> f32 {
         match self {
             Self::Angle(a) => a.intercept,
             Self::Standard(s) => s.intercept
         }
     }
     #[must_use]
-    pub fn width(&self) -> f32 {
+    pub const fn width(&self) -> f32 {
         match self {
             Self::Angle(a) => a.width,
             Self::Standard(s) => s.width
@@ -57,8 +57,8 @@ impl FunctionDescriptor {
 #[must_use]
 pub fn combine_renderers<T, K>(o: Vec<&RenderCommand<T, K>>) -> RenderCommand<T, K>
 where T: Into<Color> + Clone, K: Into<Point> + PartialEq + Clone {
-    let mut alr = vec!();
-    let mut v = vec!();
+    let mut alr = Vec::new();
+    let mut v = Vec::new();
     for x in o {
         for (a, b) in x.points() {
             if !alr.contains(&b) {
@@ -105,14 +105,14 @@ impl Object for Function {
 }   
 
 impl Function {
-    fn new(screen: (u32, u32)) -> Self {
+    const fn new(screen: (u32, u32)) -> Self {
         Self {
-            v: vec!(),
+            v: Vec::new(),
             screen
         }
     }
 
-    fn get_screen_data(&self) -> (u32, u32) {
+    const fn get_screen_data(&self) -> (u32, u32) {
         self.screen
     }
 }

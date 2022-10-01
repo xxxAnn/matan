@@ -45,7 +45,7 @@ where T: Into<Color>, K: Into<Rect> {
 
 impl<T, K> WriteCommand<T, K>
 where T: Into<Color>, K: Into<Rect> {
-    pub fn new(clr: T, rct: K, pth: &'static str, txt: String, psize: u16) -> Self {
+    pub const fn new(clr: T, rct: K, pth: &'static str, txt: String, psize: u16) -> Self {
         Self {
             clr,
             rct,
@@ -165,9 +165,9 @@ X: Text, Z: Object {
 
 impl RenderCommand<DefaultColor, DefaultPoint> {
     pub fn from_linear_function(m: f32, b: f32, width: f32, screen: (u32, u32)) -> Self {
-        let mut v = vec!();
+        let mut v = Vec::new();
         for x in 0..(screen.0) { for y in  0..(screen.1) {
-            if distance((x as f32, y as f32), (x as f32, m*(x as f32)+y as f32)) < width {
+            if distance((x as f32, y as f32), (x as f32, m.mul_add(x as f32, b))) < width {
                 v.push(((0u8, 0u8, 0u8, 1u8), (x as i32, y as i32)));
             }
         }}

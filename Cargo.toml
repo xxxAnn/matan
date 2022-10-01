@@ -2,6 +2,12 @@
 name = "matan"
 version = "0.1.0"
 edition = "2021"
+license = "GPL-3.0-or-later"
+description = "SDL2 based math animation library."
+repository = "https://github.com/xxxAnn/matan"
+readme = "README.md"
+keywords = ["Math", "animation", "manim"]
+categories = ["graphics", "rendering", "game-engines"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

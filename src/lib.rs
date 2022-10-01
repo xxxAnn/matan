@@ -1,3 +1,4 @@
+#![warn(clippy::all, clippy::pedantic, clippy::nursery, clippy::cargo)]
 #![allow(dead_code, unused_variables, clippy::cast_precision_loss, clippy::cast_possible_wrap)]
 extern crate sdl2;
 
