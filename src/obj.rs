@@ -178,5 +178,5 @@ impl RenderCommand<DefaultColor, DefaultPoint> {
 }
 
 fn distance(a: (f32, f32), b: (f32, f32)) -> f32 {
-    todo!()
+    ((b.1-a.1).powi(2) + (b.0 - a.0).powi(2)).sqrt()
 }
