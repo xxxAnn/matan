@@ -9,9 +9,10 @@ use sdl2::video::Window;
 use sdl2::ttf::Sdl2TtfContext;
 
 mod obj;
-pub mod things;
+mod things;
+pub mod utils;
 
-pub mod alias {
+mod alias {
     pub type DefaultColor = (u8, u8, u8, u8);
     pub type DefaultPoint = (i32, i32);
     pub type DefaultRect = (i32, i32, u32, u32);
@@ -19,7 +20,7 @@ pub mod alias {
 
 /// # Errors
 /// Upstreams texture creation errors.
-pub fn text<T, K>(
+fn text<T, K>(
     ttfc: &Sdl2TtfContext, cvs: &mut Canvas<Window>, 
     pth: &str, clr: T, psize: u16, rct: K, txt: &str
 ) -> Result<(), String>

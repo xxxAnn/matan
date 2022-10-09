@@ -9,17 +9,20 @@ pub struct Function {
     screen: (u32, u32)
 }
 
+#[derive(Clone)]
 pub enum FunctionDescriptor {
     Angle(AngularDescriptor),
     Standard(InterceptDescriptor)
 }
 
+#[derive(Clone)]
 pub struct AngularDescriptor {
     angle: f32,
     intercept: f32,
     width: f32
 }
 
+#[derive(Clone)]
 pub struct InterceptDescriptor {
     slope: f32,
     intercept: f32,
@@ -105,7 +108,7 @@ impl Object for Function {
 }   
 
 impl Function {
-    const fn new(screen: (u32, u32)) -> Self {
+    pub const fn new(screen: (u32, u32)) -> Self {
         Self {
             v: Vec::new(),
             screen
