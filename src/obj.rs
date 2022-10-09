@@ -34,6 +34,7 @@ where T: Into<Color>, K: Into<Point> {
     }
 }
 
+#[derive(Clone)]
 pub struct WriteCommand<T, K>
 where T: Into<Color>, K: Into<Rect> {
     clr: T,
