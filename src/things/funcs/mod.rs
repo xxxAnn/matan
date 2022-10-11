@@ -27,7 +27,7 @@ impl Object for RealRenderable {
 
 impl RealRenderable {
     #[must_use]
-    pub fn new(o: &[linear::Function], lookup_intervals: Vec<u128>, delay: u128) -> Self {
+    pub fn from_linear_function(o: &[linear::Function], lookup_intervals: Vec<u128>, delay: u128) -> Self {
         let mut r = Self {
             v: Vec::new()
         };
@@ -36,5 +36,11 @@ impl RealRenderable {
         }
         
         r
+    }
+    #[must_use]
+    pub fn new(v: Vec<((u128, u128), RenderCommand<DefaultColor, DefaultPoint>)>) -> Self {
+        Self {
+            v
+        }
     }
 }

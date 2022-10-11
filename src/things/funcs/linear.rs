@@ -12,21 +12,41 @@ pub struct Function {
 #[derive(Clone)]
 pub enum FunctionDescriptor {
     Angle(AngularDescriptor),
-    Standard(InterceptDescriptor)
+    Standard(SlopeDescriptor)
 }
 
 #[derive(Clone)]
 pub struct AngularDescriptor {
-    angle: f32,
+    angle: f32, // radians
     intercept: f32,
     width: f32
 }
 
+impl AngularDescriptor {
+    pub fn new(angle: f32, intercept: f32, width: f32) -> Self {
+        Self {
+            angle,
+            intercept,
+            width
+        }
+    }
+}
+
 #[derive(Clone)]
-pub struct InterceptDescriptor {
+pub struct SlopeDescriptor {
     slope: f32,
     intercept: f32,
     width: f32
+}
+
+impl SlopeDescriptor {
+    pub fn new(slope: f32, intercept: f32, width: f32) -> Self {
+        Self {
+            slope,
+            intercept,
+            width
+        }
+    }
 }
 
 impl FunctionDescriptor {

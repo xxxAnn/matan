@@ -152,7 +152,7 @@ X: Text, Z: Object {
                 if let Event::Quit { .. } = event { break 'main }
             }
             // only process every RR millis
-            if refresh.elapsed().as_millis() > RR {
+            if refresh.elapsed().as_millis() >= RR {
                 refresh = time::Instant::now();
                 self.process(&mut canvas, &sdl_context, &ttf_context, &video_subsys, 
                     time::Instant::now().duration_since(ins).as_millis()
@@ -167,9 +167,14 @@ X: Text, Z: Object {
 impl RenderCommand<DefaultColor, DefaultPoint> {
     pub fn from_linear_function(m: f32, b: f32, width: f32, screen: (u32, u32)) -> Self {
         let mut v = Vec::new();
-        for x in 0..(screen.0) { for y in  0..(screen.1) {
-            if distance((x as f32, y as f32), (x as f32, m.mul_add(x as f32, b))) < width {
-                v.push(((0u8, 0u8, 0u8, 1u8), (x as i32, y as i32)));
+        let w = screen.0 as i32;
+        let h = screen.1 as i32;
+        for x in 0i32..(screen.0 as i32) { for y in  0i32..(screen.1 as i32) {
+            let ry = h-y;
+            let cx = x-w/2;
+            let cy = y-h/2;
+            if distance((-m, -b), (cx as f32, cy as f32)) < width {
+                v.push(((0u8, 0u8, 0u8, 1u8), (x as i32, ry as i32)));
             }
         }}
         Self {
@@ -178,6 +183,7 @@ impl RenderCommand<DefaultColor, DefaultPoint> {
     }
 }
 
+// A, C
 fn distance(a: (f32, f32), b: (f32, f32)) -> f32 {
-    ((b.1-a.1).powi(2) + (b.0 - a.0).powi(2)).sqrt()
+    (a.0*b.0 + b.1 + a.1).abs() / (1. + a.0.powi(2)).sqrt()
 }
