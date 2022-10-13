@@ -165,11 +165,12 @@ X: Text, Z: Object {
 }
 
 impl RenderCommand<DefaultColor, DefaultPoint> {
-    pub fn from_linear_function(m: f32, b: f32, width: f32, screen: (u32, u32), cache: Cache<DefaultColor, DefaultPoint>) -> Self {
+    pub fn from_linear_function(m: f32, b: f32, width: f32, screen: (u32, u32)) -> Self {
         let mut v = Vec::new();
         let w = screen.0 as i32;
         let h = screen.1 as i32;
-        if cache
+        let ksq = width.powi(2);
+        let disc = (ksq*(1.+m.powi(2))).sqrt();
         for x in 0i32..(screen.0 as i32) { for y in  0i32..(screen.1 as i32) {
             let ry = h-y;
             let cx = x-w/2;
