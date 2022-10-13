@@ -10,6 +10,7 @@ use sdl2::ttf::Sdl2TtfContext;
 
 mod obj;
 mod things;
+mod cache;
 pub mod utils;
 
 mod alias {
