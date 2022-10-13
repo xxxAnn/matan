@@ -16,7 +16,7 @@ impl Object for RealRenderable {
     type Params = RenderCommand<DefaultColor, DefaultPoint>;
 
     fn render(&self, inst: u128) -> RenderCommand<Self::Clr, Self::Pnt> {
-       combine_renderers(self.v.iter().filter(|((a, b), _)| a<&inst && &inst<b).map(|(_, z)| z).collect())
+       combine_renderers(self.v.iter().filter(|((a, b), _)| a<=&inst && &inst<b).map(|(_, z)| z).collect())
     }
 
     fn add_snapshot(&mut self, start: u64, length: std::time::Duration, params: Option<Self::Params>) {
@@ -31,6 +31,7 @@ impl RealRenderable {
         let mut r = Self {
             v: Vec::new()
         };
+
         for i in lookup_intervals {
             r.v = (o.iter().map(|x| ((i, i+delay), x.render(i)))).collect();
         }

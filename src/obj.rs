@@ -1,12 +1,12 @@
-use crate::{text, alias::DefaultPoint, cache::Cache};
+use crate::{text, alias::DefaultPoint};
 
-use std::time;
+use std::time::{self, UNIX_EPOCH};
 
 use crate::alias::DefaultColor;
 
 use sdl2::{pixels::Color, rect::{Point, Rect}, ttf::Sdl2TtfContext, render::Canvas, video::Window, Sdl, VideoSubsystem, event::Event};
 
-pub const RR: u128 = 100;
+pub const RR: u128 = 30;
 
 pub mod fonts {
     const SANS: &str = "OpenSans-Regular.ttf";
@@ -104,7 +104,6 @@ X: Text, Z: Object {
 
     fn process(&mut self, cvs: &mut Canvas<Window>, sdl: &Sdl, ttf: &Sdl2TtfContext, vis: &VideoSubsystem, ins: u128) -> Result<(), String> {
         self.setup(cvs, sdl, ttf, vis);
-
         for r in self.object_render_commands(ins) {
             for (a, b) in r.pts {
                 cvs.set_draw_color(a);
@@ -171,21 +170,22 @@ impl RenderCommand<DefaultColor, DefaultPoint> {
         let h = screen.1 as i32;
         let ksq = width.powi(2);
         let disc = (ksq*(1.+m.powi(2))).sqrt();
-        for x in 0i32..(screen.0 as i32) { for y in  0i32..(screen.1 as i32) {
-            let ry = h-y;
+        let n = (0u8, 0u8, 0u8, 1u8);
+
+        //let bfr = time::Instant::now();
+
+        for x in 0i32..w {
             let cx = x-w/2;
-            let cy = y-h/2;
-            if distance((-m, -b), (cx as f32, cy as f32)) < width {
-                v.push(((0u8, 0u8, 0u8, 1u8), (x as i32, ry as i32)));
-            }
-        }}
+            let ray = m.mul_add(cx as f32, b);
+            v.append(&mut ((ray-disc).floor() as i32..(ray+disc).floor() as i32).into_iter().map(|y| {
+                (n, (x, -y+h/2))
+            }).collect());
+        }
+
+        //println!("Solving for y = {}x + {} took {:?}μs", &m, &b, time::Instant::now().duration_since(bfr).as_micros());
+
         Self {
             pts: v
         }
     }
-}
-
-// A, C
-fn distance(a: (f32, f32), b: (f32, f32)) -> f32 {
-    (a.0*b.0 + b.1 + a.1).abs() / (1. + a.0.powi(2)).sqrt()
 }

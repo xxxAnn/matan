@@ -80,16 +80,12 @@ impl FunctionDescriptor {
 #[must_use]
 pub fn combine_renderers<T, K>(o: Vec<&RenderCommand<T, K>>) -> RenderCommand<T, K>
 where T: Into<Color> + Clone, K: Into<Point> + PartialEq + Clone {
-    let mut alr = Vec::new();
     let mut v = Vec::new();
+    //let bfr = std::time::Instant::now();
     for x in o {
-        for (a, b) in x.points() {
-            if !alr.contains(&b) {
-                alr.push(b);
-                v.push((a.clone(), b.clone()));
-            }
-        }
+        v.extend(x.points().to_vec().into_iter());
     }
+    //println!("Combining renderers took {:?}ms", std::time::Instant::now().duration_since(bfr).as_millis());
 
     RenderCommand::new(v)
 }
@@ -100,12 +96,17 @@ impl Object for Function {
     type Params = FunctionDescriptor;
 
     fn render(&self, inst: u128) -> RenderCommand<Self::Clr, Self::Pnt> {
-        combine_renderers(self.v
+        //let bfr = std::time::Instant::now();
+        let r = combine_renderers(self.v
             .iter()
-            .filter(|((a, b), _)| a<&inst && &inst<b)
-            .map(|(_, b)| b)
+            .filter(|((a, b), _)| a<=&inst && &inst<b)
+            .map(|(_, b)| {
+                b
+            })
             .collect()
-        )
+        );
+        //println!("Rendering Function took {:?}ms", std::time::Instant::now().duration_since(bfr).as_millis());
+        r
     }
 
     fn add_snapshot(&mut self, start: u64, length: std::time::Duration, params: Option<Self::Params>) {

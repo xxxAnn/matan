@@ -31,7 +31,7 @@ impl CommandGrid<Clr, Clr, Rct, Pnt, Vec<WriteCommand<Clr, Rct>>, Vec<RenderComm
             k.v
             .iter()
             .filter(|((a, b), _)| {
-                a<&inst && &inst<b
+                a<=&inst && &inst<b
             } )
                 .map(|(_, z)| 
                     z.clone()
