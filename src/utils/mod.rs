@@ -49,10 +49,10 @@ impl LinearFunctionBuilder {
 
     pub fn add_snapshots_from_slope_form(mut self, from: u64, to: u64, parts: &[(f32, f32, f32)]) -> Self {
         let dv = (((to-from) as usize)/parts.len()) as u64;
-        //println!("Timestamps:");
+        println!("Timestamps:");
         for i in 0..parts.len() {
             let cs = (from+dv*((i) as u64), from+dv*((i+1) as u64));
-            //println!("{:?}", &cs);
+            println!("{:?}", &cs);
             let n = parts[i];
             self.f.push((cs.0, cs.1, linear::FunctionDescriptor::Angle(linear::AngularDescriptor::new(n.0, n.1, n.2))));
         }
@@ -63,7 +63,7 @@ impl LinearFunctionBuilder {
         let k = divs as f32;
         let n = ((end.0-start.0)/k, (end.1-start.1)/k, (end.2-start.2)/k);
         let mut  parts = Vec::new();
-        for i in 0..(divs+1) {
+        for i in 0..(divs) {
             let m = i as f32;
             parts.push((start.0 + n.0*m, start.1 + n.1*m, start.2 + n.2*m));
         }
