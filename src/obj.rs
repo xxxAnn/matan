@@ -1,6 +1,6 @@
 use crate::{text, alias::DefaultPoint};
 
-use std::time::{self, UNIX_EPOCH};
+use std::time;
 
 use crate::alias::DefaultColor;
 
